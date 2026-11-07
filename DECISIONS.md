@@ -17,3 +17,35 @@
    do not have compound data, so it is only an approximation.
 7. Evaluation is leave-one-race-out (train on 9 races, test on the 10th), not a random split of
    laps, because laps from the same race are near-duplicates and would leak between train and test.
+   
+## Day 4 — Initial Race-Pace Modelling
+
+### Dataset
+- 6,342 prediction rows
+- 8 races across 2023 and 2024
+- 156 driver-race groups
+- Reference pace calculated from each driver's first 5 eligible laps
+- Target: lap-time deviation from reference pace
+
+### Models evaluated
+
+| Model | MAE (s) | RMSE (s) |
+|---|---:|---:|
+| Zero-delta baseline | 1.5226 | 1.7919 |
+| Training-mean baseline | 0.8828 | 1.1514 |
+| Ridge (alpha=1) | 0.6640 | 0.9197 |
+| Nested tuned Ridge | 0.6624 | 0.9190 |
+| Wider alpha Ridge | 0.6671 | 0.9240 |
+| Random Forest | 0.6685 | 0.9273 |
+
+### Decision
+- Retain Ridge (alpha=1) as the current benchmark.
+- Nested tuning produced negligible improvement.
+- Random Forest did not outperform Ridge.
+- Prioritise feature engineering before further model tuning.
+
+### Limitations
+- Only 8 races evaluated.
+- Stint lap is a proxy, not verified tyre age.
+- Retrospective anomaly filtering was applied.
+- Current model predicts clean-lap pace deviation, not race outcomes or optimal pit strategy.
