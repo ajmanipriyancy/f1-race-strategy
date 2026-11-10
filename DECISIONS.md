@@ -156,3 +156,28 @@ Use Ridge Regression with lap and stint_lap as the first baseline model for the 
 - Reference pace is derived retrospectively from each driver-race's first five eligible laps. This is not a live race-start forecast.
 - These results validate clean-pace prediction on the selected historical dataset; they do not yet validate the strategy simulator's race-time accuracy.
 
+## Total-Level Backtesting and Model Limitations
+
+A second evaluation was performed by aggregating out-of-fold lap predictions into driver-race groups across 35 held-out races from 2023–2024.
+
+| Metric | Training-mean baseline | Ridge |
+|---|---:|---:|
+| Mean absolute driver-race total error | 28.624 s | 31.096 s |
+| Median absolute driver-race total error | 18.278 s | 20.819 s |
+| 90th percentile absolute total error | 72.654 s | 81.582 s |
+
+Ridge achieved lower average within-group lap MAE (1.009 s vs 1.144 s), but higher aggregate driver-race total error. It had lower absolute total error in 270 of 673 driver-race groups.
+
+This difference indicates that improvements in individual-lap accuracy do not necessarily translate into accurate accumulated time predictions. Correlated prediction errors can accumulate over a driver's race.
+
+An investigation of 2023 Round 9 showed increasing underprediction of lap times at higher stint ages. Ridge's predicted delta became increasingly negative, while the observed mean delta did not decrease to the same extent.
+
+**Interpretation and limitations:**
+- The pace model is evaluated as a lap-level estimator, not a reliable full-race elapsed-time predictor.
+- Total-level metrics represent sums over eligible prediction laps only. They exclude reference laps, pit laps and post-pit laps, and do not include pit-loss penalties.
+- The model does not contain verified tyre compound, fuel load, weather, traffic or safety-car information.
+- Stint age is a pit-stop-derived proxy, not verified tyre age.
+- Stints beyond approximately 25 laps are outside the model's empirically supported reliable range.
+- No claim is made that the model identifies physical tyre degradation or fuel effects.
+
+The Ridge model is retained for the lap-pace estimation component because of its pooled lap-level improvement, with its limitations explicitly disclosed.
