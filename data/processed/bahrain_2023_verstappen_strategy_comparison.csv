@@ -1,0 +1,5 @@
+strategy,pit_laps,estimated_remaining_time_seconds
+0-stop,(),4947.963397269152
+1-stop,"(27,)",4958.240040471421
+2-stop,"(15, 34)",4978.05095928462
+Historical actual,"(14, 36)",4978.139091492374
